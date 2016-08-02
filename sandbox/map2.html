@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+<script>
+
+    var width = 960,
+            height = 500;
+
+
+    var point = [-118.308966, 34.180839];
+
+    var projection = d3.geoOrthographic()
+            .center(point)
+            .scale(500)
+            .precision(.1)
+
+    var canvas = d3.select("body")
+            .append("canvas")
+            .attr("width", width)
+            .attr("height", height);
+
+    var context = canvas.node().getContext("2d");
+
+    var scale,
+            translate,
+            visibleArea, // minimum area threshold for points inside viewport
+            invisibleArea; // minimum area threshold for points outside viewport
+
+
+    var simplify = d3.geo.transform({
+        point: function(x, y, z) {
+            if (z < visibleArea) return;
+            x = x * scale + translate[0];
+            y = y * scale + translate[1];
+            if (x >= -10 && x <= width + 10 && y >= -10 && y <= height + 10 || z >= invisibleArea) this.stream.point(x, y);
+        }
+    });
+
+    var path = d3.geo.path()
+            .projection(projection)
+//            .projection(simplify)
+            .context(context);
+
+    var zoom = d3.behavior.zoom()
+            .size([width, height])
+            .on("zoom", zoomed);
+
+    d3.json("world-50m.json", function (error, world) {
+        if (error) throw error;
+
+        console.log(world)
+
+        context.beginPath();
+        path(topojson.feature(world, world.objects.land));
+        context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        context.lineWidth = '1';
+        context.stroke();
+
+        context.beginPath();
+        path(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }));
+        context.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        context.lineWidth = '1';
+        context.stroke();
+
+//        canvas
+//        //                .datum(topojson.mesh(topojson.presimplify(json)))
+//                .datum(topojson.feature(world, world.objects.land))
+//                .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+//                .call(zoomTo(point, 5).event)
+//                .transition()
+//                .duration(60 * 1000 / 89 * 2)
+//                .each(jump);
+    });
+
+        function zoomTo(location, scale) {
+            var point = projection(location);
+            return zoom
+                    .translate([width / 2 - point[0] * scale, height / 2 - point[1] * scale])
+                    .scale(scale);
+        }
+
+
+
+//    zoomTo(point, 10000).event
+    //
+        function zoomed(d) {
+            console.log('D', d, zoom.translate(), zoom.scale())
+            translate = zoom.translate();
+            scale = zoom.scale();
+            visibleArea = 1 / scale / scale;
+            invisibleArea = 200 * visibleArea;
+            context.clearRect(0, 0, width, height);
+            context.beginPath();
+            path(d);
+            context.stroke();
+        }
+    //
+    //    function jump() {
+    //        var t = d3.select(this);
+    //        (function repeat() {
+    //            t = t.transition()
+    //                    .call(zoomTo(ny, 6).event)
+    //                    .transition()
+    //                    .call(zoomTo(sf, 4).event)
+    //                    .each("end", repeat);
+    //        })();
+    //    }
+
+    //    d3.select(self.frameElement).style("height", height + "px");
+
+</script>

@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import mapboxgl from 'mapbox-gl'
-mapboxgl.accessToken = 'pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng';
-
-
 
 export default class MapTile extends Component {
   componentDidMount() {
     console.log('MOUNTED', this.refs.map)
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng';
+    //mapboxgl.accessToken = 'pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng';
     var map = new mapboxgl.Map({
         container: this.refs.map,
         style: 'mapbox://styles/dvreed77/cir1ar1fk000lbunsz4rsjc3f',

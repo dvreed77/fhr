@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3.geo.projection.v0.min.js"></script>
+    <script src="//d3js.org/topojson.v1.min.js"></script>
+
+    <style>
+        canvas {
+            background: #c9c4bc;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+
+<script>
+
+
+//    (function () {
+        var cache, canvas, circle, ctx, ctx_cache, draw, height, init, offices, orlando, path, path_cache, projection, width;
+        offices = [
+            {
+                coord: [
+                    -81.379092,
+                    28.542884
+                ],
+                r: 50
+            },
+            {
+                coord: [
+                    -81.379002,
+                    28.540481
+                ],
+                r: 33
+            },
+            {
+                coord: [
+                    -81.369515,
+                    28.538479
+                ],
+                r: 17
+            }
+        ];
+        height = 500;
+        width = 600;
+        projection = d3.geo.mercator()
+                .center(offices[offices.length - 1].coord)
+                .scale(400000)
+                .translate([
+                    width / 2,
+                    height / 2
+                ]);
+        canvas = d3.select('body')
+                .append('canvas')
+                .attr('height', height)
+                .attr('width', width);
+
+//        cache = document.createElement('canvas');
+//        cache.height = height;
+//        cache.width = width;
+
+        ctx = canvas.node().getContext('2d');
+//        ctx_cache = cache.getContext('2d');
+        path = d3.geo.path().projection(projection).context(ctx);
+//        path_cache = d3.geo.path().projection(projection).context(ctx_cache);
+        circle = d3.geo.circle();
+        orlando = null;
+        d3.json('https://s3-us-west-2.amazonaws.com/s.cdpn.io/68727/orlando.json', function (error, data) {
+            orlando = data;
+            init();
+            return d3.timer(draw);
+        });
+        init = function () {
+            ctx.beginPath();
+            path(topojson.feature(orlando, orlando.objects.neighborhoods));
+            ctx.fillStyle = '#dcd8d2';
+            ctx.fill();
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = '#c9c4bc';
+            ctx.stroke();
+            ctx.beginPath();
+            path(topojson.feature(orlando, orlando.objects.streets));
+            ctx.lineWidth = '1.5';
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
+            ctx.stroke();
+            ctx.beginPath();
+//            path_cache(topojson.feature(orlando, orlando.objects.lanes));
+//            ctx_cache.lineWidth = '6';
+//            ctx_cache.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+//            ctx_cache.stroke();
+//            ctx_cache.lineWidth = '3';
+//            ctx_cache.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            return ctx.stroke();
+        };
+        draw = function () {
+            var i, len, office;
+//            ctx.clearRect(0, 0, width, height);
+//            ctx.drawImage(cache, 0, 0);
+            for (i = 0, len = offices.length; i < len; i++) {
+//                if (window.CP.shouldStopExecution(1)) {
+//                    break;
+//                }
+                office = offices[i];
+                ctx.beginPath();
+                path(circle.origin(office.coord).angle(0.0005)());
+                ctx.fillStyle = '#3388a7';
+                ctx.fill();
+                office.r -= 0.2;
+                if (office.r <= 0) {
+                    office.r = 50;
+                }
+                ctx.lineWidth = office.r;
+                ctx.strokeStyle = 'rgba(51, 136, 167, ' + (1 - office.r / 50) + ')';
+                ctx.stroke();
+            }
+//            window.CP.exitedLoop(1);
+            return false;
+        };
+//    }.call(this));
+</script>
+</html>
