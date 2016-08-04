@@ -29,6 +29,35 @@ export function loadUser(login, requiredFields = []) {
   }
 }
 
+export const ROUTES_REQUEST = 'ROUTES_REQUEST'
+export const ROUTES_SUCCESS = 'ROUTES_SUCCESS'
+export const ROUTES_FAILURE = 'ROUTES_FAILURE'
+
+function fetchRoutes() {
+  return {
+    [CALL_API]: {
+      types: [ ROUTES_REQUEST, ROUTES_SUCCESS, ROUTES_FAILURE ],
+      endpoint: `routes.json`,
+      schema: Schemas.ROUTES
+    }
+  }
+}
+
+// Fetches a single user from Github API unless it is cached.
+// Relies on Redux Thunk middleware.
+export function loadRoutes() {
+  return (dispatch, getState) => {
+    // const user = getState().entities.users[login]
+    // if (user && requiredFields.every(key => user.hasOwnProperty(key))) {
+    //   return null
+    // }
+
+    // console.log('loading ROutes')
+
+    return dispatch(fetchRoutes())
+  }
+}
+
 export const REPO_REQUEST = 'REPO_REQUEST'
 export const REPO_SUCCESS = 'REPO_SUCCESS'
 export const REPO_FAILURE = 'REPO_FAILURE'

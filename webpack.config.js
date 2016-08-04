@@ -19,7 +19,7 @@ module.exports = {
     alias: {
       'webworkify': 'webworkify-webpack'
     }
-  },  
+  },
   module: {
     loaders: [
       {

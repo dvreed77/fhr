@@ -17,12 +17,17 @@ function getNextPageUrl(response) {
   return nextLink.split(';')[0].slice(1, -1)
 }
 
-const API_ROOT = 'https://api.github.com/'
+// const API_ROOT = 'https://api.github.com/'
+const API_ROOT = '/'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, schema) {
-  const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
+
+
+  const fullUrl = API_ROOT + endpoint
+
+  console.log('Calling API', fullUrl)
 
   return fetch(fullUrl)
     .then(response =>
@@ -33,11 +38,9 @@ function callApi(endpoint, schema) {
       }
 
       const camelizedJson = camelizeKeys(json)
-      const nextPageUrl = getNextPageUrl(response)
 
       return Object.assign({},
-        normalize(camelizedJson, schema),
-        { nextPageUrl }
+        normalize(camelizedJson, schema)
       )
     })
 }
@@ -63,6 +66,10 @@ const repoSchema = new Schema('repos', {
   idAttribute: repo => repo.fullName.toLowerCase()
 })
 
+const routeSchema = new Schema('routes', {
+  idAttribute: route => route.properties.name
+})
+
 repoSchema.define({
   owner: userSchema
 })
@@ -72,7 +79,9 @@ export const Schemas = {
   USER: userSchema,
   USER_ARRAY: arrayOf(userSchema),
   REPO: repoSchema,
-  REPO_ARRAY: arrayOf(repoSchema)
+  REPO_ARRAY: arrayOf(repoSchema),
+  ROUTE: routeSchema,
+  ROUTES: arrayOf(routeSchema)
 }
 
 // Action key that carries API call info interpreted by this Redux middleware.
