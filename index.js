@@ -6,6 +6,10 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import Root from './containers/Root'
 import configureStore from './store/configureStore'
 
+import mapboxgl from 'mapbox-gl'
+mapboxgl.accessToken = 'pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng';
+
+
 const store = configureStore()
 const history = syncHistoryWithStore(browserHistory, store)
 
