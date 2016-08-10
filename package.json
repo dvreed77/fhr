@@ -1,9 +1,10 @@
 {
-  "name": "redux-real-world-example",
+  "name": "fhr-routes",
   "version": "0.0.0",
-  "description": "Redux real-world example",
+  "description": "Routes page for Forest Hill Runners",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "node deploy.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "lodash": "^4.14.1",
     "mapbox": "^1.0.0-beta3",
     "mapbox-gl": "^0.21.0",
+    "mapbox.js": "^2.4.0",
     "normalizr": "^2.0.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
@@ -47,6 +49,7 @@
     "redux-devtools": "^3.1.0",
     "redux-devtools-dock-monitor": "^1.0.1",
     "redux-devtools-log-monitor": "^1.0.3",
+    "rsync": "^0.5.0",
     "transform-loader": "^0.2.3",
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.2.0",
