@@ -5,7 +5,7 @@ import * as L from 'mapbox.js'
 
 import * as d3 from 'd3'
 
-import { Map, Marker, Popup, TileLayer, GeoJson } from 'react-leaflet';
+import { Map, Marker, Popup, TileLayer, GeoJson, LayersControl, ZoomControl } from 'react-leaflet';
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng';
 
@@ -24,36 +24,29 @@ export default class MapTile extends Component {
   }
 
   render() {
-
-    const position = [51.505, -0.09];
-
-    var divStyle = {
-      width: '270px',
-      height: '175px',
-      float: 'left'
-    };
+    var bounds = d3.geoBounds(this.props.route)
+    bounds = [[bounds[0][1],bounds[0][0]], [bounds[1][1],bounds[1][0]]]
 
     const url = 'https://api.mapbox.com/styles/v1/dvreed77/cir1ar1fk000lbunsz4rsjc3f/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng'
     
-    const map = (
-    <Map style={divStyle} center={position} zoom={13}>
-      <TileLayer url={url} />
-      <GeoJson data={this.props.route} />
-    </Map>
-    );
-
-    console.log(this.props.route)
-
-    const {properties: {distance, name}} = this.props.route
-
-    var divStyle = {
-      width: '270px',
-      height: '175px',
-      float: 'left'
-    };
-
+    var s = {
+      color: '#114632',
+      weight: 4,
+      opacity: 1
+    }
     return (
-      <div style={divStyle}>{map}</div>
+        <Map 
+          className="map"
+          bounds={bounds} 
+          zoom={13} 
+          zoomControl={false} 
+          scrollWheelZoom={false}
+          dragging={false}
+          doubleClickZoom={false}
+        >   
+          <TileLayer url={url} />
+          <GeoJson data={this.props.route} style={s} clickable={false}/>
+        </Map>
     )
   }
 }

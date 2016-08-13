@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Redux real-world example</title>
+    <title>Routes | FHR</title>
     <!-- <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" /> -->
     <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
     <style>
@@ -12,6 +12,24 @@
       .leaflet-container {
     height: 400px;
     width: 100%;
+}
+
+body {
+    color: #333;
+    fill: currentColor;
+    font-size: 12px;
+    line-height: 1.5em;
+}
+
+ul.routes-list li.route-card .map {
+    height: 175px;
+}
+
+.inline-stats strong, .inline-stats b {
+    display: block;
+    font-weight: 300;
+    font-size: 1.8rem;
+    line-height: 1.2em;
 }
 
       .metadata {
@@ -25,21 +43,28 @@ ul {
     list-style: none;
 }
 
+ul, ol {
+    margin: 0;
+    padding: 0;
+}
+
+ul.routes-list li.route-card {
+    display: block;
+    float: left;
+    position: relative;
+    width: 23.4%;
+    margin: 0 1.6% 40px 0;
+    background-color: #f7f7f7;
+}
+
 .inline-stats li {
     display: inline-block;
     vertical-align: top;
     margin-right: 20px;
 }
 
-.inline-stats strong, .inline-stats b {
-    display: block;
-    font-weight: 300;
-    font-size: 2.4rem;
-    line-height: 1.2em;
-}
-
 ul.routes-list li.route-card .metadata h3 {
-    height: 47px;
+    height: 20px;
     margin-top: 0;
     overflow-y: hidden;
     word-wrap: break-word;
@@ -52,6 +77,14 @@ a, .clickable, .btn-link {
     transition: color 0.1s ease,border 0.1s ease,box-shadow 0.1s ease,background-color 0.1s ease,opacity 0.1s ease;
     -o-transition: color 0.1s ease,border 0.1s ease,box-shadow 0.1s ease,background-color 0.1s ease,opacity 0.1s ease;
     -ms-transition: color 0.1s ease,border 0.1s ease,box-shadow 0.1s ease,background-color 0.1s ease,opacity 0.1s ease;
+}
+
+.metadata h3 {
+    height: 47px;
+    margin-top: 0;
+    overflow-y: hidden;
+    word-wrap: break-word;
+    font-size: 18px;
 }
     </style>
   </head>

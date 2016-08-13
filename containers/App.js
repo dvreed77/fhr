@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import MapTile from '../components/MapTile'
+import RouteCard from '../components/RouteCard'
 import _ from 'lodash'
 // import { resetErrorMessage } from '../actions'
 
@@ -13,22 +13,11 @@ import { loadRoutes } from '../actions'
 class App extends Component {
   constructor(props) {
     super(props)
-    // this.handleChange = this.handleChange.bind(this)
-    // this.handleDismissClick = this.handleDismissClick.bind(this)
   }
 
   componentWillMount() {
     this.props.loadRoutes()
   }
-
-  // handleDismissClick(e) {
-  //   this.props.resetErrorMessage()
-  //   e.preventDefault()
-  // }
-
-  // handleChange(nextValue) {
-  //   browserHistory.push(`/${nextValue}`)
-  // }
 
   renderErrorMessage() {
     const { errorMessage } = this.props
@@ -53,23 +42,12 @@ class App extends Component {
     if (!Object.keys(routes).length) {
       return <h1><i>Loading routes...</i></h1>
     }
-
-    console.log(_.values(routes))
     return (
-      <div>
+      <ul className="routes-list">
         {_.values(routes).map(function(route, i) {
-          var divStyle = {
-            width: '300px',
-            height: '350px',
-            float: 'left'
-          };
-          return (
-            <div key={i} style={divStyle}>
-              <MapTile  route={route}/>
-            </div>
-            )
-        })}        
-      </div>
+          return <RouteCard key={i} route={route} />
+        })}
+      </ul>
     )
   }
 }
